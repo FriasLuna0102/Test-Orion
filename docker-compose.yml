@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:17
+    container_name: oriontek_db
+    environment:
+      POSTGRES_DB: oriontek_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - oriontek_net
+
+  backend:
+    build: ./backend
+    container_name: oriontek_backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - oriontek_net
+
+volumes:
+  pgdata:
+
+networks:
+  oriontek_net:
+    driver: bridge
