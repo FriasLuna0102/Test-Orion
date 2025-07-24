@@ -38,4 +38,17 @@ public class ClienteController {
     public void eliminar(@PathVariable Long id) {
         clienteService.eliminarCliente(id);
     }
+
+    @PutMapping("/{id}")
+    public ClienteDto actualizar(@PathVariable Long id, @Valid @RequestBody ClienteDto dto) {
+        return clienteService.actualizarCliente(id, dto);
+    }
+
+    @DeleteMapping("/{clienteId}/direcciones/{direccionId}")
+    public void eliminarDireccion(@PathVariable Long clienteId, @PathVariable Long direccionId) {
+        clienteService.eliminarDireccion(clienteId, direccionId);
+    }
+
+
+
 }

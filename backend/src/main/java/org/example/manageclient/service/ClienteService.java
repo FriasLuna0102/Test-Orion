@@ -1,5 +1,6 @@
 package org.example.manageclient.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.example.manageclient.dto.ClienteDto;
 import org.example.manageclient.dto.DireccionDto;
 import org.example.manageclient.entity.Cliente;
@@ -38,16 +39,36 @@ public class ClienteService {
         clienteRepository.deleteById(id);
     }
 
+    public ClienteDto actualizarCliente(Long id, ClienteDto dto) {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Cliente no encontrado"));
+
+        cliente.setNombre(dto.getNombre());
+        cliente.setTelefono(dto.getTelefono());
+        cliente.setEmail(dto.getEmail());
+
+        cliente.getDirecciones().clear();
+        for (DireccionDto dirDto : dto.getDirecciones()) {
+            Direccion dir = new Direccion();
+            dir.setCalle(dirDto.getCalle());
+            dir.setCiudad(dirDto.getCiudad());
+            dir.setPais(dirDto.getPais());
+            dir.setCliente(cliente);
+            cliente.getDirecciones().add(dir);
+        }
+
+        Cliente actualizado = clienteRepository.save(cliente);
+        return ClienteDto.fromEntity(actualizado);
+    }
 
 
+    public void eliminarDireccion(Long clienteId, Long direccionId) {
+        Cliente cliente = clienteRepository.findById(clienteId)
+                .orElseThrow(() -> new EntityNotFoundException("Cliente no encontrado"));
 
-
-
-
-
-
-
-
+        cliente.getDirecciones().removeIf(d -> d.getId().equals(direccionId));
+        clienteRepository.save(cliente);
+    }
 
 
 
