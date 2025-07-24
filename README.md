@@ -8,7 +8,7 @@ Proyecto completo para la **gestión de clientes y direcciones**, desarrollado c
 ## 📦 Tecnologías Usadas
 
 ### Backend:
-- Java 17
+- Java 21
 - Spring Boot
 - Spring Data JPA
 - PostgreSQL
